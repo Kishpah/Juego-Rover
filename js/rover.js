@@ -1,6 +1,7 @@
 //let rover = {
     //Modelo del rover
     let roverModel;
+    let rueda = [];
     let rueda1;
     let rueda2;
     let rueda3;
@@ -48,60 +49,25 @@
         cuerpo.receiveShadow = true;
         roverModel.add(cuerpo);
 
-        geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        mat = new THREE.MeshPhongMaterial({ color: 0x555555 });
-        rueda1 = new THREE.Mesh(geo, mat);
-        rueda1.position.x = 0;
-        rueda1.position.y = 0.6;
-        rueda1.position.z = -0.4;
-        rueda1.castShadow = true;
-        rueda1.receiveShadow = true;
-        roverModel.add(rueda1);
+        for (i=0;i<6;i++)
+        {
+            geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
+            mat = new THREE.MeshPhongMaterial({ color: 0x555555 });
+            rueda[i] = new THREE.Mesh(geo, mat);
+            if(i===0 || i === 3) { offsetRuedaX = 0.6; }
+            else if(i===1 || i===4) { offsetRuedaX = 0; }
+            else { offsetRuedaX = -0.6; }
+            if(i<3) { offsetRuedaY = 0.6; }
+            else { offsetRuedaY = -0.6; }
+            offsetRuedaZ = -0.4;
 
-        geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        rueda2 = new THREE.Mesh(geo, mat);
-        rueda2.position.x = 0.6;
-        rueda2.position.y = 0.6;
-        rueda2.position.z = -0.4;
-        rueda2.castShadow = true;
-        rueda2.receiveShadow = true;
-        roverModel.add(rueda2);
-
-        geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        rueda3 = new THREE.Mesh(geo, mat);
-        rueda3.position.x = -0.6;
-        rueda3.position.y = 0.6;
-        rueda3.position.z = -0.4;
-        rueda3.castShadow = true;
-        rueda3.receiveShadow = true;
-        roverModel.add(rueda3);
-
-        geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        rueda4 = new THREE.Mesh(geo, mat);
-        rueda4.position.x = 0;
-        rueda4.position.y = -0.6;
-        rueda4.position.z = -0.4;
-        rueda4.castShadow = true;
-        rueda4.receiveShadow = true;
-        roverModel.add(rueda4);
-
-        geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        rueda5 = new THREE.Mesh(geo, mat);
-        rueda5.position.x = 0.6;
-        rueda5.position.y = -0.6;
-        rueda5.position.z = -0.4;
-        rueda5.castShadow = true;
-        rueda5.receiveShadow = true;
-        roverModel.add(rueda5);
-
-        geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        rueda6 = new THREE.Mesh(geo, mat);
-        rueda6.position.x = -0.6;
-        rueda6.position.y = -0.6;
-        rueda6.position.z = -0.4;
-        rueda6.castShadow = true;
-        rueda6.receiveShadow = true;
-        roverModel.add(rueda6);
+            rueda[i].position.x = offsetRuedaX;
+            rueda[i].position.y = offsetRuedaY;
+            rueda[i].position.z = offsetRuedaZ;
+            rueda[i].castShadow = true;
+            rueda[i].receiveShadow = true;
+            roverModel.add(rueda[i]);
+        }
 
         geo = new THREE.BoxGeometry(0.1, 0.5, 0.3);
         mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });

@@ -14,7 +14,7 @@ var giroAntena = 0.01;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-    75,
+    45,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
@@ -41,9 +41,14 @@ var mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
 var suelo = new THREE.Mesh(geo, mat);
 suelo.receiveShadow = true;
 suelo.position.z = -0.54;
-scene.add(suelo);
+//scene.add(suelo);
 
-camera.position.z = 3;
+baldosa.position.x = -1.5;
+baldosa.position.y = -1.5;
+baldosa.position.z = -.7;
+scene.add(baldosa);
+
+camera.position.z = 10;
 
 const keyDown = function (e) {
     switch (e.key) {
@@ -101,12 +106,11 @@ const animate = function () {
 
     //rover.rotation.x = giroX;
     //rover.rotation.z = -giroY;
-    rueda1.position.z = -0.4 + Math.random() * 0.03;
-    rueda2.position.z = -0.4 + Math.random() * 0.03;
-    rueda3.position.z = -0.4 + Math.random() * 0.03;
-    rueda4.position.z = -0.4 + Math.random() * 0.03;
-    rueda5.position.z = -0.4 + Math.random() * 0.03;
-    rueda6.position.z = -0.4 + Math.random() * 0.03;
+    for(i=0;i<6;i++)
+    {
+        rueda[i].position.z = -0.4 + Math.random() * 0.03;
+    }
+
     cabeza.rotation.z += giroCabeza;
     if (Math.abs(cabeza.rotation.z) > 0.2) {
         giroCabeza = -giroCabeza;
