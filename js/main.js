@@ -33,10 +33,11 @@ directionalLight.position.set(1, 2, 3).normalize();
 directionalLight.castShadow = true;
 scene.add(directionalLight);
 
-rover.crearModelo();
-scene.add(rover.roverModel);
+crearModelo();
+scene.add(roverModel);
 
-geo = new THREE.PlaneGeometry(20, 20, 20);
+var geo = new THREE.PlaneGeometry(20, 20, 20);
+var mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
 var suelo = new THREE.Mesh(geo, mat);
 suelo.receiveShadow = true;
 suelo.position.z = -0.54;

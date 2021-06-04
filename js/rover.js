@@ -1,25 +1,35 @@
-let rover = {
+//let rover = {
     //Modelo del rover
-    roverModel,
+    let roverModel;
+    let rueda1;
+    let rueda2;
+    let rueda3;
+    let rueda4;
+    let rueda5;
+    let rueda6;
+    let cuerpo;
+    let cabeza;
+    let ojo;
+    let antena;
 
     //Posicionar Rover
-    function: posRover(tablero, x, y) {
+    function posRover(tablero, x, y) {
         roverModel.position.x = x;
         roverModel.position.y = y;
         //this.roverModel.position.z = tablero.posZ(x,y);
         //this.roverModel.rotation.x = tablero.rotX(x,y);
         //this.roverModel.rotation.y = tablero.rotY(x,y);
-    },
+    };
 
     //Posicionar Ruedas
-    function: posRuedas(tablero, x, y) {
+    function posRuedas(tablero, x, y) {
         this.roverModel.rueda1.position.z = 0.4;
         this.roverModel.rueda2.position.z = 0.4;
         this.roverModel.rueda3.position.z = 0.4;
         this.roverModel.rueda4.position.z = 0.4;
         this.roverModel.rueda5.position.z = 0.4;
         this.roverModel.rueda6.position.z = 0.4;
-    },
+    };
 
     //Posicionar Antena
     //Posicionar Cabeza
@@ -28,19 +38,19 @@ let rover = {
     //constructor() {}
 
     //Método que genera el modelo
-    crearModelo = function() {
+    function crearModelo() {
         roverModel = new THREE.Group();
 
         var geo = new THREE.BoxGeometry(1, 0.7, 0.3);
         var mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
-        var cuerpo = new THREE.Mesh(geo, mat);
+        cuerpo = new THREE.Mesh(geo, mat);
         cuerpo.castShadow = true;
         cuerpo.receiveShadow = true;
         roverModel.add(cuerpo);
 
         geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
         mat = new THREE.MeshPhongMaterial({ color: 0x555555 });
-        var rueda1 = new THREE.Mesh(geo, mat);
+        rueda1 = new THREE.Mesh(geo, mat);
         rueda1.position.x = 0;
         rueda1.position.y = 0.6;
         rueda1.position.z = -0.4;
@@ -49,7 +59,7 @@ let rover = {
         roverModel.add(rueda1);
 
         geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        var rueda2 = new THREE.Mesh(geo, mat);
+        rueda2 = new THREE.Mesh(geo, mat);
         rueda2.position.x = 0.6;
         rueda2.position.y = 0.6;
         rueda2.position.z = -0.4;
@@ -58,7 +68,7 @@ let rover = {
         roverModel.add(rueda2);
 
         geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        var rueda3 = new THREE.Mesh(geo, mat);
+        rueda3 = new THREE.Mesh(geo, mat);
         rueda3.position.x = -0.6;
         rueda3.position.y = 0.6;
         rueda3.position.z = -0.4;
@@ -67,7 +77,7 @@ let rover = {
         roverModel.add(rueda3);
 
         geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        var rueda4 = new THREE.Mesh(geo, mat);
+        rueda4 = new THREE.Mesh(geo, mat);
         rueda4.position.x = 0;
         rueda4.position.y = -0.6;
         rueda4.position.z = -0.4;
@@ -76,7 +86,7 @@ let rover = {
         roverModel.add(rueda4);
 
         geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        var rueda5 = new THREE.Mesh(geo, mat);
+        rueda5 = new THREE.Mesh(geo, mat);
         rueda5.position.x = 0.6;
         rueda5.position.y = -0.6;
         rueda5.position.z = -0.4;
@@ -85,7 +95,7 @@ let rover = {
         roverModel.add(rueda5);
 
         geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
-        var rueda6 = new THREE.Mesh(geo, mat);
+        rueda6 = new THREE.Mesh(geo, mat);
         rueda6.position.x = -0.6;
         rueda6.position.y = -0.6;
         rueda6.position.z = -0.4;
@@ -95,7 +105,7 @@ let rover = {
 
         geo = new THREE.BoxGeometry(0.1, 0.5, 0.3);
         mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
-        var cabeza = new THREE.Mesh(geo, mat);
+        cabeza = new THREE.Mesh(geo, mat);
         cabeza.position.x = 0.5;
         cabeza.position.y = 0;
         cabeza.position.z = 0.5;
@@ -104,7 +114,7 @@ let rover = {
 
         geo = new THREE.CylinderGeometry(0.08, 0.08, 0.08, 10);
         mat = new THREE.MeshPhongMaterial({ color: 0x222222 });
-        var ojo = new THREE.Mesh(geo, mat);
+        ojo = new THREE.Mesh(geo, mat);
         ojo.rotation.z = Math.PI / 2;
         ojo.position.x = 0.08;
         ojo.position.y = 0.12;
@@ -152,5 +162,5 @@ let rover = {
         antena.position.z = 0.25;
         roverModel.add(antena);
         //return roverModel;
-    }
-}
+    };
+//}
