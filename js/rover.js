@@ -14,22 +14,19 @@
     let antena;
 
     //Posicionar Rover
-    function posRover(tablero, x, y) {
+    function posRover(terreno, x, y) {
         roverModel.position.x = x;
         roverModel.position.y = y;
-        //this.roverModel.position.z = tablero.posZ(x,y);
-        //this.roverModel.rotation.x = tablero.rotX(x,y);
-        //this.roverModel.rotation.y = tablero.rotY(x,y);
+        //this.roverModel.position.z = terreno.posZ(x,y);
+        //this.roverModel.rotation.x = terreno.rotX(x,y);
+        //this.roverModel.rotation.y = terreno.rotY(x,y);
     };
 
     //Posicionar Ruedas
-    function posRuedas(tablero, x, y) {
-        this.roverModel.rueda1.position.z = 0.4;
-        this.roverModel.rueda2.position.z = 0.4;
-        this.roverModel.rueda3.position.z = 0.4;
-        this.roverModel.rueda4.position.z = 0.4;
-        this.roverModel.rueda5.position.z = 0.4;
-        this.roverModel.rueda6.position.z = 0.4;
+    function posRuedas(terreno, x, y) {
+        for(i=0;i<6;i++){
+            rueda[i].position.z = 0.4;
+        }
     };
 
     //Posicionar Antena

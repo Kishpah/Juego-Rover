@@ -13,8 +13,11 @@ var giroCabeza = 0.01;
 var giroAntena = 0.01;
 
 const scene = new THREE.Scene();
+//scene.fog = new THREE.Fog(0xDD6655,8,12);
+scene.background = new THREE.Color(0xDD6655);
+
 const camera = new THREE.PerspectiveCamera(
-    45,
+    35,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
@@ -43,10 +46,25 @@ suelo.receiveShadow = true;
 suelo.position.z = -0.54;
 //scene.add(suelo);
 
-baldosa.position.x = -1.5;
-baldosa.position.y = -1.5;
-baldosa.position.z = -.7;
-scene.add(baldosa);
+/*
+baldosa.init();
+baldosa.generarDatosBaldosa();
+console.log(baldosa.heightSubMap);
+baldosa.generarModeloBaldosa();
+baldosa.baldosaModel.position.x = -1.5;
+baldosa.baldosaModel.position.y = -1.5;
+baldosa.baldosaModel.position.z = -.7;
+scene.add(baldosa.baldosaModel);
+*/
+
+terreno.init();
+terreno.generarTerreno();
+for(i=0;i<terreno.tamañoTerreno;i++){
+    for(j=0;j<terreno.tamañoTerreno;j++){
+        scene.add(terreno.baldosas[i][j].baldosaModel);
+    }
+}
+
 
 camera.position.z = 10;
 
