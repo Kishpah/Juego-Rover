@@ -1,214 +1,261 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Modelo Rover Marte</title>
-		<style>
-			body { margin: 0; }
-			canvas {display: block; box-sizing: border-box; border: 1px solid black;}
-		</style>
-	</head>
-	<body>
-		<script src="js/three.js"></script>
-		<script>
-			var giroX = -1.3;
-			var giroY = -0.8;
-			var giroCabeza = 0.01;
-			var giroAntena = 0.01;
+    <head>
+        <title>Modelo Rover Marte</title>
+        <style>
+            body {
+                margin: 0;
+            }
+            canvas {
+                display: block;
+                box-sizing: border-box;
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="js/three.js"></script>
+        <script>
+            var giroX = -1.3;
+            var giroY = -0.8;
+            var giroCabeza = 0.01;
+            var giroAntena = 0.01;
 
-			const scene = new THREE.Scene();
-			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-			const renderer = new THREE.WebGLRenderer({antialias:true});
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			//renderer.domElement.
-			document.body.appendChild( renderer.domElement );
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
 
-			// Luz ambiente para la escena
-			var light = new THREE.AmbientLight(0x404040); // soft white light
-			scene.add(light);
-			// Luz direccional para darle chicha
-			var directionalLight = new THREE.DirectionalLight(0xffffff);
-			directionalLight.position.set(1, 2, 3).normalize();
-			scene.add(directionalLight);
+            // Luz ambiente para la escena
+            var light = new THREE.AmbientLight(0x404040); // soft white light
+            scene.add(light);
+            // Luz direccional para darle chicha
+            var directionalLight = new THREE.DirectionalLight(0xffffff);
+            directionalLight.position.set(1, 2, 3).normalize();
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
 
-			var rover = new THREE.Group();
+            var rover = new THREE.Group();
 
-			var geo = new THREE.BoxGeometry(1,0.7,0.3);
-			var mat = new THREE.MeshPhongMaterial({color: 0xAAAAAA});
-			
-			var cuerpo = new THREE.Mesh(geo, mat);
+            var geo = new THREE.BoxGeometry(1, 0.7, 0.3);
+            var mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
+            var cuerpo = new THREE.Mesh(geo, mat);
+            cuerpo.castShadow = true;
+            cuerpo.receiveShadow = true;
+            rover.add(cuerpo);
 
-			rover.add(cuerpo);
+            geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
+            mat = new THREE.MeshPhongMaterial({ color: 0x555555 });
+            var rueda1 = new THREE.Mesh(geo, mat);
+            rueda1.position.x = 0;
+            rueda1.position.y = 0.6;
+            rueda1.position.z = -0.4;
+            rueda1.castShadow = true;
+            rueda1.receiveShadow = true;
+            rover.add(rueda1);
 
-			geo = new THREE.CylinderGeometry(.15,.15,.15,20);
-			mat = new THREE.MeshPhongMaterial({color: 0x555555});
-			var rueda1 = new THREE.Mesh(geo, mat);
-			rueda1.position.x = 0;
-			rueda1.position.y = 0.6;
-			rueda1.position.z = -.4;
-			rover.add(rueda1);
+            geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
+            var rueda2 = new THREE.Mesh(geo, mat);
+            rueda2.position.x = 0.6;
+            rueda2.position.y = 0.6;
+            rueda2.position.z = -0.4;
+            rueda2.castShadow = true;
+            rueda2.receiveShadow = true;
+            rover.add(rueda2);
 
-			geo = new THREE.CylinderGeometry(.15,.15,.15,20);
-			var rueda2 = new THREE.Mesh(geo, mat);
-			rueda2.position.x = .6;
-			rueda2.position.y = 0.6;
-			rueda2.position.z = -.4;
-			rover.add(rueda2);
+            geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
+            var rueda3 = new THREE.Mesh(geo, mat);
+            rueda3.position.x = -0.6;
+            rueda3.position.y = 0.6;
+            rueda3.position.z = -0.4;
+            rueda3.castShadow = true;
+            rueda3.receiveShadow = true;
+            rover.add(rueda3);
 
-			geo = new THREE.CylinderGeometry(.15,.15,.15,20);
-			var rueda3 = new THREE.Mesh(geo, mat);
-			rueda3.position.x = -.6;
-			rueda3.position.y = 0.6;
-			rueda3.position.z = -.4;
-			rover.add(rueda3);
+            geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
+            var rueda4 = new THREE.Mesh(geo, mat);
+            rueda4.position.x = 0;
+            rueda4.position.y = -0.6;
+            rueda4.position.z = -0.4;
+            rueda4.castShadow = true;
+            rueda4.receiveShadow = true;
+            rover.add(rueda4);
 
-			geo = new THREE.CylinderGeometry(.15,.15,.15,20);
-			var rueda4 = new THREE.Mesh(geo, mat);
-			rueda4.position.x = 0;
-			rueda4.position.y = -0.6;
-			rueda4.position.z = -.4;
-			rover.add(rueda4);
+            geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
+            var rueda5 = new THREE.Mesh(geo, mat);
+            rueda5.position.x = 0.6;
+            rueda5.position.y = -0.6;
+            rueda5.position.z = -0.4;
+            rueda5.castShadow = true;
+            rueda5.receiveShadow = true;
+            rover.add(rueda5);
 
-			geo = new THREE.CylinderGeometry(.15,.15,.15,20);
-			var rueda5 = new THREE.Mesh(geo, mat);
-			rueda5.position.x = .6;
-			rueda5.position.y = -0.6;
-			rueda5.position.z = -.4;
-			rover.add(rueda5);
+            geo = new THREE.CylinderGeometry(0.15, 0.15, 0.15, 20);
+            var rueda6 = new THREE.Mesh(geo, mat);
+            rueda6.position.x = -0.6;
+            rueda6.position.y = -0.6;
+            rueda6.position.z = -0.4;
+            rueda6.castShadow = true;
+            rueda6.receiveShadow = true;
+            rover.add(rueda6);
 
-			geo = new THREE.CylinderGeometry(.15,.15,.15,20);
-			var rueda6 = new THREE.Mesh(geo, mat);
-			rueda6.position.x = -.6;
-			rueda6.position.y = -0.6;
-			rueda6.position.z = -.4;
-			rover.add(rueda6);	
-			
-			geo = new THREE.BoxGeometry(.1,.5, .3);
-			mat = new THREE.MeshPhongMaterial({color: 0xAAAAAA});
-			var cabeza = new THREE.Mesh(geo,mat);
-			cabeza.position.x = .5;
-			cabeza.position.y=0;
-			cabeza.position.z=.5;
+            geo = new THREE.BoxGeometry(0.1, 0.5, 0.3);
+            mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
+            var cabeza = new THREE.Mesh(geo, mat);
+            cabeza.position.x = 0.5;
+            cabeza.position.y = 0;
+            cabeza.position.z = 0.5;
+            cabeza.castShadow = true;
+            cabeza.receiveShadow = true;
 
-			geo = new THREE.CylinderGeometry(.08,.08,.08,10);
-			mat = new THREE.MeshPhongMaterial({color: 0x222222});
-			var ojo = new THREE.Mesh(geo,mat);
-			ojo.rotation.z=Math.PI/2;
-			ojo.position.x = .08;
-			ojo.position.y = .12;
-			ojo.position.z = 0;
+            geo = new THREE.CylinderGeometry(0.08, 0.08, 0.08, 10);
+            mat = new THREE.MeshPhongMaterial({ color: 0x222222 });
+            var ojo = new THREE.Mesh(geo, mat);
+            ojo.rotation.z = Math.PI / 2;
+            ojo.position.x = 0.08;
+            ojo.position.y = 0.12;
+            ojo.position.z = 0;
+            ojo.castShadow = true;
+            ojo.receiveShadow = true;
+            cabeza.add(ojo);
 
-			cabeza.add(ojo);
+            geo = new THREE.CylinderGeometry(0.08, 0.08, 0.08, 10);
+            ojo = new THREE.Mesh(geo, mat);
+            ojo.rotation.z = Math.PI / 2;
+            ojo.position.x = 0.08;
+            ojo.position.y = -0.12;
+            ojo.position.z = 0;
+            ojo.castShadow = true;
+            ojo.receiveShadow = true;
+            cabeza.add(ojo);
 
-			geo = new THREE.CylinderGeometry(.08,.08,.08,10);
-			ojo = new THREE.Mesh(geo,mat);
-			ojo.rotation.z=Math.PI/2;
-			ojo.position.x = .08;
-			ojo.position.y = -.12;
-			ojo.position.z = 0;
+            rover.add(cabeza);
 
-			cabeza.add(ojo);
+            geo = new THREE.CylinderGeometry(0, 0.12, 0.02, 10, 1, true);
+            mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
+            mat.side = THREE.DoubleSide;
+            antena = new THREE.Mesh(geo, mat);
+            antena.castShadow = true;
+            antena.receiveShadow = true;
 
-			rover.add(cabeza);
+            geo = new THREE.CylinderGeometry(0.12, 0.18, 0.02, 10, 1, true);
+            trozoAntena = new THREE.Mesh(geo, mat);
+            trozoAntena.position.y = -0.02;
+            trozoAntena.castShadow = true;
+            trozoAntena.receiveShadow = true;
+            antena.add(trozoAntena);
+            geo = new THREE.CylinderGeometry(0.18, 0.24, 0.04, 10, 1, true);
+            trozoAntena = new THREE.Mesh(geo, mat);
+            trozoAntena.position.y = -0.05;
+            trozoAntena.castShadow = true;
+            trozoAntena.receiveShadow = true;
+            antena.add(trozoAntena);
 
-			geo = new THREE.CylinderGeometry(0,0.12,0.02,10,1,true);
-			mat = new THREE.MeshPhongMaterial({color: 0xAAAAAA});
-			mat.side = THREE.DoubleSide;
-			antena = new THREE.Mesh(geo,mat);
+            antena.rotation.z = -Math.PI / 2;
+            antena.rotation.y = 1;
+            antena.position.x = -0.4;
+            antena.position.y = 0;
+            antena.position.z = 0.25;
+            rover.add(antena);
 
-			geo = new THREE.CylinderGeometry(0.12,0.18,0.02,10,1,true);
-			trozoAntena = new THREE.Mesh(geo,mat);
-			trozoAntena.position.y=-.02;
-			antena.add(trozoAntena);
-			geo = new THREE.CylinderGeometry(0.18,0.24,0.04,10,1,true);
-			trozoAntena = new THREE.Mesh(geo,mat);
-			trozoAntena.position.y=-.05;
-			antena.add(trozoAntena);
+            scene.add(rover);
 
-			antena.rotation.z=-Math.PI/2;
-			antena.rotation.y=1;
-			antena.position.x=-.4;
-			antena.position.y=0;
-			antena.position.z=.25;
+            geo = new THREE.PlaneGeometry(20, 20, 20);
+            var suelo = new THREE.Mesh(geo, mat);
+            suelo.receiveShadow = true;
+            suelo.position.z = -0.54;
+            scene.add(suelo);
 
-			rover.add(antena);
+            camera.position.z = 3;
 
-			scene.add(rover);
+            const keyDown = function (e) {
+                switch (e.key) {
+                    case "ArrowUp":
+                        giroX += 0.05;
+                        break;
+                    case "ArrowDown":
+                        giroX -= 0.05;
+                        break;
+                    case "ArrowLeft":
+                        giroY += 0.05;
+                        break;
+                    case "ArrowRight":
+                        giroY -= 0.05;
+                        break;
+                }
+            };
 
-			camera.position.z = 3;
+            mouseClick = false;
+            offsetX = 0;
+            offsetY = 0;
+            proporcionGiro = 0.01;
 
-			const keyDown = function(e) {
-				switch(e.key) {
-					case 'ArrowUp': giroX += 0.05; break;
-					case 'ArrowDown': giroX -= 0.05;  break;
-					case 'ArrowLeft': giroY += 0.05;  break;
-					case 'ArrowRight': giroY -= 0.05;  break;
-				}
-			};
+            const mouseMove = function (e) {
+                if (mouseClick === true) {
+                    giroY += (e.offsetX - offsetX) * proporcionGiro;
+                    giroX += (e.offsetY - offsetY) * proporcionGiro;
+                    offsetX = e.offsetX;
+                    offsetY = e.offsetY;
+                }
+            };
 
-			mouseClick = false;
-			offsetX = 0;
-			offsetY = 0;
-			proporcionGiro = 0.01;
+            const mouseDown = function (e) {
+                mouseClick = true;
+                offsetX = e.offsetX;
+                offsetY = e.offsetY;
+            };
 
-			const mouseMove = function(e) {
-				if(mouseClick === true)
-				{
-					giroY += (e.offsetX-offsetX)*proporcionGiro;
-					giroX += (e.offsetY-offsetY)*proporcionGiro;
-					offsetX = e.offsetX;
-					offsetY = e.offsetY;
-				}
-			}
+            const mouseUp = function (e) {
+                if (mouseClick === true) {
+                    giroX += (e.offsetX - offsetX) * proporcionGiro;
+                    giroY += (e.offsetY - offsetY) * proporcionGiro;
+                    offsetX = e.offsetX;
+                    offsetY = e.offsetY;
+                }
+                mouseClick = false;
+            };
 
-			const mouseDown = function(e) {
-				mouseClick = true;
-				offsetX = e.offsetX;
-				offsetY = e.offsetY;
-			}			
+            const animate = function () {
+                requestAnimationFrame(animate);
+                scene.rotation.x = giroX;
+                scene.rotation.z = giroY;
+                //directionalLight.position.x += 0.01;
+                //directionalLight.rotation.z += 0.01;
 
-			const mouseUp = function(e) {
-				if(mouseClick === true)
-				{
-					giroX += (e.offsetX-offsetX)*proporcionGiro;
-					giroY += (e.offsetY-offsetY)*proporcionGiro;
-					offsetX = e.offsetX;
-					offsetY = e.offsetY;
-				}				
-				mouseClick = false;
-			}
+                //rover.rotation.x = giroX;
+                //rover.rotation.z = -giroY;
+                rueda1.position.z = -0.4 + Math.random() * 0.03;
+                rueda2.position.z = -0.4 + Math.random() * 0.03;
+                rueda3.position.z = -0.4 + Math.random() * 0.03;
+                rueda4.position.z = -0.4 + Math.random() * 0.03;
+                rueda5.position.z = -0.4 + Math.random() * 0.03;
+                rueda6.position.z = -0.4 + Math.random() * 0.03;
+                cabeza.rotation.z += giroCabeza;
+                if (Math.abs(cabeza.rotation.z) > 0.2) {
+                    giroCabeza = -giroCabeza;
+                }
+                antena.rotation.y += giroAntena;
+                if (antena.rotation.y < 0.8 || antena.rotation.y > 1.2) {
+                    giroAntena = -giroAntena;
+                }
 
-			const animate = function () {
-				requestAnimationFrame( animate );
+                renderer.render(scene, camera);
+            };
 
-				rover.rotation.x = giroX;
-				rover.rotation.z = giroY;
-				rueda1.position.z = -.4 + Math.random()*.03;
-				rueda2.position.z = -.4 + Math.random()*.03;
-				rueda3.position.z = -.4 + Math.random()*.03;
-				rueda4.position.z = -.4 + Math.random()*.03;
-				rueda5.position.z = -.4 + Math.random()*.03;
-				rueda6.position.z = -.4 + Math.random()*.03;
-				cabeza.rotation.z += giroCabeza;
-				if(Math.abs(cabeza.rotation.z)>.2)
-				{
-					giroCabeza = -giroCabeza;
-				}
-				antena.rotation.y += giroAntena;
-				if(antena.rotation.y<.8 || antena.rotation.y>1.2)
-				{
-					giroAntena = -giroAntena;
-				}
+            document.body.addEventListener("keydown", keyDown, false);
 
-				renderer.render( scene, camera );
-			};
+            renderer.domElement.addEventListener("mousemove", mouseMove, false);
+            renderer.domElement.addEventListener("mousedown", mouseDown, false);
+            renderer.domElement.addEventListener("mouseup", mouseUp, false);
 
-			document.body.addEventListener('keydown', keyDown, false);
-			
-			renderer.domElement.addEventListener('mousemove', mouseMove, false);
-			renderer.domElement.addEventListener('mousedown', mouseDown, false);
-			renderer.domElement.addEventListener('mouseup', mouseUp, false);
-
-			animate();
-		</script>
-	</body>
+            animate();
+        </script>
+    </body>
 </html>
