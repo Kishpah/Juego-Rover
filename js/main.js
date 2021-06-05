@@ -22,7 +22,7 @@ scene.background = new THREE.Color(0xDD6655);
 const camera = new THREE.PerspectiveCamera(
     35,
     window.innerWidth / window.innerHeight,
-    6,
+    5,
     25
 );
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -86,7 +86,7 @@ const keyDown = function (e) {
         break;
     }
     //posRoverZ = terreno.devolverZ(posRoverX, posRoverY)-0.4;
-    colocarRuedas();
+    colocarRover();
 };
 
 mouseClick = false;

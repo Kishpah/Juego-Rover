@@ -128,10 +128,8 @@ var terreno = {
         //Obtenemos el triángulo de terreno correspondiente
         var vecTriangulo = [];
         vecTriangulo[0] = new THREE.Vector3(Math.floor(x), Math.floor(y), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI][subBaldosaJ]);
-        vecTriangulo[1] = new THREE.Vector3(Math.floor(x+1), Math.floor(y), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ]);
-        vecTriangulo[2] = new THREE.Vector3(Math.floor(x+1), Math.floor(y+1), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ+1]);
-        //console.log("Posicion: " + x + ", " + y);
-        //console.log(vecTriangulo);
+        vecTriangulo[1] = new THREE.Vector3(Math.floor(x)+1, Math.floor(y), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ]);
+        vecTriangulo[2] = new THREE.Vector3(Math.floor(x)+1, Math.floor(y)+1, this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ+1]);
 
         //Obtenemos la intersección
         var ray = new THREE.Ray();
@@ -147,8 +145,8 @@ var terreno = {
 
         //En caso contrario, probamos con el otro triángulo del cuadrado.
         vecTriangulo[0] = new THREE.Vector3(Math.floor(x), Math.floor(y), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI][subBaldosaJ]);
-        vecTriangulo[1] = new THREE.Vector3(Math.floor(x+1), Math.floor(y+1), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ+1]);
-        vecTriangulo[2] = new THREE.Vector3(Math.floor(x), Math.floor(y+1), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ]);
+        vecTriangulo[1] = new THREE.Vector3(Math.floor(x)+1, Math.floor(y)+1, this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ+1]);
+        vecTriangulo[2] = new THREE.Vector3(Math.floor(x), Math.floor(y)+1, this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI][subBaldosaJ+1]);
         intersect = new THREE.Vector3();
         intersect = ray.intersectTriangle(vecTriangulo[0], vecTriangulo[1], vecTriangulo[2], false, intersect);
 

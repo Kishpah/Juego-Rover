@@ -27,32 +27,22 @@
         //this.roverModel.rotation.y = terreno.rotY(x,y);
     };
 
+    function colocarRover() {
+        posRoverZ = terreno.devolverZ(posRoverX, posRoverY)+0.2;
+        colocarRuedas();
+    }
+
     //Posicionar Ruedas
     function colocarRuedas() {
-        //console.log("Posición Rover " + posRoverX + ", " + posRoverY);
-        //console.log("Posición Rueda3 " + rueda[3].position.x + ", " + rueda[3].position.y);
-        var i=3;
+        var i=0;
         var pos1 = new THREE.Vector3();
-        var pos2 = new THREE.Vector3();
-        var pos3 = new THREE.Vector3();
         var z=0;
 
-        //var posRuedaZ = [];
-        //for(i=0;i<6;i++){
-            console.log("------");
+        for(i=0;i<6;i++){
             rueda[i].getWorldPosition(pos1);
-            console.log(pos1);
             z = terreno.devolverZ(pos1.x, pos1.y);
-            console.log(z);
-            pos2.x = pos1.x;
-            pos2.y = pos1.y;
-            pos2.z= z;
-            console.log(pos2);
-            pos3  = rueda[i].worldToLocal(pos2);
-            console.log(pos3);
-            console.log(rueda[i].position);
-            //rueda[i].position.z = pos3.z-0.4;
-        //}
+            rueda[i].position.z = z-posRoverZ+0.07;
+        }
         
         //console.log((posRoverX+rueda[3].position.x) + ", " + (posRoverY+rueda[3].position.y) + ", " + posRuedaZ[3]);
         //rueda[3].position.z = posRuedaZ[3]-0.4;
