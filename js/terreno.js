@@ -1,4 +1,4 @@
-const diferenciaAlturaTerreno = 0.4;
+const diferenciaAlturaTerreno = 0.5;
 
 var baldosa = {
   // Cada baldosa se genera a partir de 9 baldosas más pequeñas (3x3)
@@ -103,13 +103,60 @@ var terreno = {
                 baldosaTMP.coordY=posJ*3;
                 baldosaTMP.baldosaModel.position.x = baldosaTMP.coordX;
                 baldosaTMP.baldosaModel.position.y = baldosaTMP.coordY;
-                baldosaTMP.baldosaModel.position.z = -0.7;
+                baldosaTMP.baldosaModel.position.z = 0;
                 
                 this.baldosas[posI][posJ]=baldosaTMP;
             }
         }
     },
-    generarBorde: function(){
+    devolverZ: function(x,y) {
+        //Disparamos un rayo en vertical hacia el suelo y comprobamos dónde se corta con el triángulo correspondiente
+        if(x<0 || y<0 || x>=this.tamañoTerreno*3 || y>=this.tamañoTerreno*3)
+        {
+            return 0;
+        };
 
+        //Obtenemos la baldosa y la sub baldosa correspondientes
+        var baldosaI = Math.floor(x/3);
+        var baldosaJ = Math.floor(y/3);
+        var subBaldosaI = Math.floor(x-baldosaI*3);
+        var subBaldosaJ = Math.floor(y-baldosaJ*3);
+
+        var vecOrigen = new THREE.Vector3(x,y,10);
+        var vecDir = new THREE.Vector3(0,0,-1);
+
+        //Obtenemos el triángulo de terreno correspondiente
+        var vecTriangulo = [];
+        vecTriangulo[0] = new THREE.Vector3(Math.floor(x), Math.floor(y), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI][subBaldosaJ]);
+        vecTriangulo[1] = new THREE.Vector3(Math.floor(x+1), Math.floor(y), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ]);
+        vecTriangulo[2] = new THREE.Vector3(Math.floor(x+1), Math.floor(y+1), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ+1]);
+        //console.log("Posicion: " + x + ", " + y);
+        //console.log(vecTriangulo);
+
+        //Obtenemos la intersección
+        var ray = new THREE.Ray();
+        ray.set(vecOrigen, vecDir);
+        var intersect = new THREE.Vector3();
+        intersect = ray.intersectTriangle(vecTriangulo[0], vecTriangulo[1], vecTriangulo[2], false, intersect);
+
+        // Si hay resultado, lo devolvemos
+        if(intersect != null)
+        {
+            return intersect.z;
+        }
+
+        //En caso contrario, probamos con el otro triángulo del cuadrado.
+        vecTriangulo[0] = new THREE.Vector3(Math.floor(x), Math.floor(y), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI][subBaldosaJ]);
+        vecTriangulo[1] = new THREE.Vector3(Math.floor(x+1), Math.floor(y+1), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ+1]);
+        vecTriangulo[2] = new THREE.Vector3(Math.floor(x), Math.floor(y+1), this.baldosas[baldosaI][baldosaJ].heightSubMap[subBaldosaI+1][subBaldosaJ]);
+        intersect = new THREE.Vector3();
+        intersect = ray.intersectTriangle(vecTriangulo[0], vecTriangulo[1], vecTriangulo[2], false, intersect);
+
+        if(intersect != null)
+        {
+            return intersect.z;
+        }
+
+        return 0;
     }
 };

@@ -27,7 +27,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-//renderer.shadowMap.enabled = mostrarSombras;
+renderer.shadowMap.enabled = mostrarSombras;
 document.body.appendChild(renderer.domElement);
 
 // Luz ambiente para la escena
@@ -50,7 +50,6 @@ var geo = new THREE.PlaneGeometry(100,100, 20);
 var mat = new THREE.MeshPhongMaterial({ color: 0xAA4433 });
 var suelo = new THREE.Mesh(geo, mat);
 suelo.receiveShadow = mostrarSombras;
-suelo.position.z = -0.7;
 scene.add(suelo);
 
 terreno.init();
@@ -85,6 +84,8 @@ const keyDown = function (e) {
             posRoverX += 0.05;
         break;
     }
+    //posRoverZ = terreno.devolverZ(posRoverX, posRoverY)-0.4;
+    colocarRuedas();
 };
 
 mouseClick = false;
@@ -119,18 +120,6 @@ const mouseUp = function (e) {
 
 const animate = function () {
     requestAnimationFrame(animate);
-    //scene.rotation.x = giroX;
-    //scene.rotation.z = giroY;
-    //directionalLight.position.x += 0.01;
-    //directionalLight.rotation.z += 0.01;
-
-    //rover.rotation.x = giroX;
-    //rover.rotation.z = -giroY;
-    /*
-    for(i=0;i<6;i++)
-    {
-        rueda[i].position.z = -0.4 + Math.random() * 0.03;
-    }*/
 
     cabeza.rotation.z += giroCabeza;
     if (Math.abs(cabeza.rotation.z) > 0.2) {
@@ -144,6 +133,7 @@ const animate = function () {
     camera.position.y = posCamaraY;
     roverModel.position.x = posRoverX;
     roverModel.position.y = posRoverY;
+    roverModel.position.z = posRoverZ;
     renderer.render(scene, camera);
 };
 

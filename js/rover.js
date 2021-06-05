@@ -7,9 +7,9 @@
     let ojo;
     let antena;
 
-    let posRoverX=0;
-    let posRoverY=0;
-    let posRoverZ;
+    let posRoverX=0; //15;
+    let posRoverY=0; //15;
+    let posRoverZ=0.2;
     let scaleRover;
     let rotationRoverX=0;
     let rotationRoverY=0;
@@ -28,14 +28,38 @@
     };
 
     //Posicionar Ruedas
-    function posRuedas(terreno, x, y) {
-        for(i=0;i<6;i++){
-            rueda[i].position.z = 0.4;
-        }
+    function colocarRuedas() {
+        //console.log("Posición Rover " + posRoverX + ", " + posRoverY);
+        //console.log("Posición Rueda3 " + rueda[3].position.x + ", " + rueda[3].position.y);
+        var i=3;
+        var pos1 = new THREE.Vector3();
+        var pos2 = new THREE.Vector3();
+        var pos3 = new THREE.Vector3();
+        var z=0;
+
+        //var posRuedaZ = [];
+        //for(i=0;i<6;i++){
+            console.log("------");
+            rueda[i].getWorldPosition(pos1);
+            console.log(pos1);
+            z = terreno.devolverZ(pos1.x, pos1.y);
+            console.log(z);
+            pos2.x = pos1.x;
+            pos2.y = pos1.y;
+            pos2.z= z;
+            console.log(pos2);
+            pos3  = rueda[i].worldToLocal(pos2);
+            console.log(pos3);
+            console.log(rueda[i].position);
+            //rueda[i].position.z = pos3.z-0.4;
+        //}
+        
+        //console.log((posRoverX+rueda[3].position.x) + ", " + (posRoverY+rueda[3].position.y) + ", " + posRuedaZ[3]);
+        //rueda[3].position.z = posRuedaZ[3]-0.4;
     };
 
     //Posicionar Antena
-    //Posicionar Cabeza
+    //-Posicionar Cabeza
  
     //Constructor
     //constructor() {}
