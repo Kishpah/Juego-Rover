@@ -40,10 +40,11 @@ directionalLight.castShadow = mostrarSombras;
 scene.add(directionalLight);
 
 crearModelo();
+/*
 roverModel.scale.x=.5;
 roverModel.scale.y=.5;
 roverModel.scale.z=.5;
-
+*/
 scene.add(roverModel);
 
 var geo = new THREE.PlaneGeometry(100,100, 20);
