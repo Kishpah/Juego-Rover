@@ -14,17 +14,29 @@ var giroAntena = 0.01;
 var posCamaraX = 0;
 var posCamaraY = 0;
 var mostrarSombras = false;
+var dirRover = new THREE.Vector3(1,0,0);
+var velRover = 0.05;
+var difGiro = 0.1;
 
+//Creamos la escena
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xDD6655,8,40);
+//Niebla y fondo rojos
+scene.fog = new THREE.Fog(0xDD6655,8,20);
 scene.background = new THREE.Color(0xDD6655);
 
+//Cámara
 const camera = new THREE.PerspectiveCamera(
     35,
     window.innerWidth / window.innerHeight,
     5,
     25
 );
+camera.position.z = 5;
+camera.rotation.x = 1;
+camera.rotation.z = -0;
+posCamaraY = -8;
+
+//Creamos el renderer y el canvas para que ocupen toda la ventana
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = mostrarSombras;
@@ -37,22 +49,24 @@ scene.add(light);
 var directionalLight = new THREE.DirectionalLight(0xffffff);
 directionalLight.position.set(1, 2, 3).normalize();
 directionalLight.castShadow = mostrarSombras;
+directionalLight.shadow.camera.left=-30;
+directionalLight.shadow.camera.right=30;
+directionalLight.shadow.camera.top = 30;
+directionalLight.shadow.camera.bottom=-30;
 scene.add(directionalLight);
 
+//Generamos el modelo del Rover y lo añadimos a la escena
 crearModelo();
-/*
-roverModel.scale.x=.5;
-roverModel.scale.y=.5;
-roverModel.scale.z=.5;
-*/
 scene.add(roverModel);
 
+//Creamos un suelo para la parte donde no haya terreno
 var geo = new THREE.PlaneGeometry(100,100, 20);
 var mat = new THREE.MeshPhongMaterial({ color: 0xAA4433 });
 var suelo = new THREE.Mesh(geo, mat);
 suelo.receiveShadow = mostrarSombras;
 scene.add(suelo);
 
+//Generamos un trozo de terreno, con relieve aleatorio y lo añadimos a la escena
 terreno.init();
 terreno.generarTerreno();
 for(i=0;i<terreno.tamañoTerreno;i++){
@@ -61,67 +75,51 @@ for(i=0;i<terreno.tamañoTerreno;i++){
     }
 }
 
-camera.position.z = 5;
-camera.rotation.x = 1;
-camera.rotation.z = -0;
-posCamaraY = -8;
+//Comprobamos las pulsaciones del teclado
+var teclaAbajo=false;
+var teclaArriba=false;
+var teclaDerecha=false;
+var teclaIzquierda=false;
 
 const keyDown = function (e) {
-    switch (e.key) {
+    switch(e.key){
         case "ArrowUp":
-            posCamaraY += 0.05;
-            posRoverY += 0.05;
+            teclaArriba = true;
             break;
         case "ArrowDown":
-            posCamaraY -= 0.05;
-            posRoverY -= 0.05;
+            teclaAbajo = true;
             break;
         case "ArrowLeft":
-            posCamaraX -= 0.05;
-            posRoverX -= 0.05;
+            teclaIzquierda = true;
         break;
         case "ArrowRight":
-            posCamaraX += 0.05;
-            posRoverX += 0.05;
+            teclaDerecha = true;
         break;
     }
-    //posRoverZ = terreno.devolverZ(posRoverX, posRoverY)-0.4;
-    colocarRover();
 };
 
-mouseClick = false;
-offsetX = 0;
-offsetY = 0;
-proporcionGiro = 0.01;
-
-const mouseMove = function (e) {
-    if (mouseClick === true) {
-        giroY += (e.offsetX - offsetX) * proporcionGiro;
-        giroX += (e.offsetY - offsetY) * proporcionGiro;
-        offsetX = e.offsetX;
-        offsetY = e.offsetY;
-    }
-};
-
-const mouseDown = function (e) {
-    mouseClick = true;
-    offsetX = e.offsetX;
-    offsetY = e.offsetY;
-};
-
-const mouseUp = function (e) {
-    if (mouseClick === true) {
-        giroX += (e.offsetX - offsetX) * proporcionGiro;
-        giroY += (e.offsetY - offsetY) * proporcionGiro;
-        offsetX = e.offsetX;
-        offsetY = e.offsetY;
-    }
-    mouseClick = false;
-};
-
+const keyUp = function (e) {
+        switch(e.key){
+            case "ArrowUp":
+                teclaArriba = false;
+                break;
+            case "ArrowDown":
+                teclaAbajo = false;
+                break;
+            case "ArrowLeft":
+                teclaIzquierda = false;
+            break;
+            case "ArrowRight":
+                teclaDerecha = false;
+            break;
+        }
+    };
+    
+//Animamos la escena
 const animate = function () {
     requestAnimationFrame(animate);
 
+    //Giramos la cabeza y la antena
     cabeza.rotation.z += giroCabeza;
     if (Math.abs(cabeza.rotation.z) > 0.2) {
         giroCabeza = -giroCabeza;
@@ -130,18 +128,74 @@ const animate = function () {
     if (antena.rotation.y < 0.8 || antena.rotation.y > 1.2) {
         giroAntena = -giroAntena;
     }
-    camera.position.x = posCamaraX;
-    camera.position.y = posCamaraY;
-    roverModel.position.x = posRoverX;
-    roverModel.position.y = posRoverY;
-    roverModel.position.z = posRoverZ;
+
+    //Comprobamos las pulsaciones de las teclas y actualizamos la posición del rover
+    if(teclaArriba||teclaAbajo||teclaIzquierda||teclaDerecha){
+        /*
+        //Movemos el rover en la dirección de las teclas pulsadas
+        if(teclaArriba){posRoverY+=velRover}
+        if(teclaAbajo){posRoverY-=velRover}
+        if(teclaIzquierda){posRoverX-=velRover}
+        if(teclaDerecha){posRoverX+=velRover}
+        */
+
+        //Modificamos la dirección del rover según las teclas pulsadas
+        if(velRover<0.1){
+            velRover+=0.01;
+        }
+        if(teclaArriba){
+            dirRover.y+=difGiro;
+        }
+        if(teclaAbajo){
+            dirRover.y-=difGiro;
+        }
+        if(teclaIzquierda){
+            dirRover.x-=difGiro;
+        }
+        if(teclaDerecha){
+            dirRover.x+=difGiro;
+        }
+        //Ajustamos la dirección según las pulsaciones de las teclas.
+        dirRover=dirRover.normalize();
+
+        //Movemos el Rover según la dirección y la velocidad
+        posRoverX+=dirRover.x*velRover;
+        posRoverY+=dirRover.y*velRover;
+
+        //Ajustamos el ángulo del rover según la dirección
+        var rotacion = 0;
+        rotacion=dirRover.angleTo(new THREE.Vector3(1,0,0));
+        if(dirRover.y<0){rotacion = 2*Math.PI - rotacion};
+        roverModel.rotation.z=rotacion;
+        
+        //Movemos el rover, y con él la cámara
+        camera.position.x = posRoverX;
+        camera.position.y = posRoverY-8;
+        roverModel.position.x = posRoverX;
+        roverModel.position.y = posRoverY;
+        colocarRover(); //Ajusta la altura del rover y de las ruedas
+        roverModel.position.z = posRoverZ;
+    }
+    else{
+        if(velRover>0){
+            velRover-=0.01;
+        }
+    }
+
     renderer.render(scene, camera);
 };
 
-document.body.addEventListener("keydown", keyDown, false);
 
-renderer.domElement.addEventListener("mousemove", mouseMove, false);
-renderer.domElement.addEventListener("mousedown", mouseDown, false);
-renderer.domElement.addEventListener("mouseup", mouseUp, false);
+document.body.addEventListener("keydown", keyDown, false);
+document.body.addEventListener("keyup", keyUp, false);
+
+posRoverX=terreno.tamañoTerreno*3/2;
+posRoverY=terreno.tamañoTerreno*3/2;
+camera.position.x = posRoverX;
+camera.position.y = posRoverY-8;
+roverModel.position.x = posRoverX;
+roverModel.position.y = posRoverY;
+colocarRover(); //Ajusta la altura del rover y de las ruedas
+roverModel.position.z = posRoverZ;
 
 animate();
