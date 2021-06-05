@@ -11,20 +11,23 @@ var giroX = -1.3;
 var giroY = -0.8;
 var giroCabeza = 0.01;
 var giroAntena = 0.01;
+var posCamaraX = 0;
+var posCamaraY = 0;
+var mostrarSombras = false;
 
 const scene = new THREE.Scene();
-//scene.fog = new THREE.Fog(0xDD6655,8,12);
+scene.fog = new THREE.Fog(0xDD6655,8,40);
 scene.background = new THREE.Color(0xDD6655);
 
 const camera = new THREE.PerspectiveCamera(
     35,
     window.innerWidth / window.innerHeight,
-    0.1,
-    1000
+    6,
+    25
 );
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
+//renderer.shadowMap.enabled = mostrarSombras;
 document.body.appendChild(renderer.domElement);
 
 // Luz ambiente para la escena
@@ -33,29 +36,22 @@ scene.add(light);
 // Luz direccional para darle chicha
 var directionalLight = new THREE.DirectionalLight(0xffffff);
 directionalLight.position.set(1, 2, 3).normalize();
-directionalLight.castShadow = true;
+directionalLight.castShadow = mostrarSombras;
 scene.add(directionalLight);
 
 crearModelo();
+roverModel.scale.x=.5;
+roverModel.scale.y=.5;
+roverModel.scale.z=.5;
+
 scene.add(roverModel);
 
-var geo = new THREE.PlaneGeometry(20, 20, 20);
-var mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
+var geo = new THREE.PlaneGeometry(100,100, 20);
+var mat = new THREE.MeshPhongMaterial({ color: 0xAA4433 });
 var suelo = new THREE.Mesh(geo, mat);
-suelo.receiveShadow = true;
-suelo.position.z = -0.54;
-//scene.add(suelo);
-
-/*
-baldosa.init();
-baldosa.generarDatosBaldosa();
-console.log(baldosa.heightSubMap);
-baldosa.generarModeloBaldosa();
-baldosa.baldosaModel.position.x = -1.5;
-baldosa.baldosaModel.position.y = -1.5;
-baldosa.baldosaModel.position.z = -.7;
-scene.add(baldosa.baldosaModel);
-*/
+suelo.receiveShadow = mostrarSombras;
+suelo.position.z = -0.7;
+scene.add(suelo);
 
 terreno.init();
 terreno.generarTerreno();
@@ -65,23 +61,29 @@ for(i=0;i<terreno.tamañoTerreno;i++){
     }
 }
 
-
-camera.position.z = 10;
+camera.position.z = 5;
+camera.rotation.x = 1;
+camera.rotation.z = -0;
+posCamaraY = -8;
 
 const keyDown = function (e) {
     switch (e.key) {
         case "ArrowUp":
-            giroX += 0.05;
+            posCamaraY += 0.05;
+            posRoverY += 0.05;
             break;
         case "ArrowDown":
-            giroX -= 0.05;
+            posCamaraY -= 0.05;
+            posRoverY -= 0.05;
             break;
         case "ArrowLeft":
-            giroY += 0.05;
-            break;
+            posCamaraX -= 0.05;
+            posRoverX -= 0.05;
+        break;
         case "ArrowRight":
-            giroY -= 0.05;
-            break;
+            posCamaraX += 0.05;
+            posRoverX += 0.05;
+        break;
     }
 };
 
@@ -117,17 +119,18 @@ const mouseUp = function (e) {
 
 const animate = function () {
     requestAnimationFrame(animate);
-    scene.rotation.x = giroX;
-    scene.rotation.z = giroY;
+    //scene.rotation.x = giroX;
+    //scene.rotation.z = giroY;
     //directionalLight.position.x += 0.01;
     //directionalLight.rotation.z += 0.01;
 
     //rover.rotation.x = giroX;
     //rover.rotation.z = -giroY;
+    /*
     for(i=0;i<6;i++)
     {
         rueda[i].position.z = -0.4 + Math.random() * 0.03;
-    }
+    }*/
 
     cabeza.rotation.z += giroCabeza;
     if (Math.abs(cabeza.rotation.z) > 0.2) {
@@ -137,7 +140,10 @@ const animate = function () {
     if (antena.rotation.y < 0.8 || antena.rotation.y > 1.2) {
         giroAntena = -giroAntena;
     }
-
+    camera.position.x = posCamaraX;
+    camera.position.y = posCamaraY;
+    roverModel.position.x = posRoverX;
+    roverModel.position.y = posRoverY;
     renderer.render(scene, camera);
 };
 

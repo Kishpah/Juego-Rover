@@ -2,19 +2,24 @@
     //Modelo del rover
     let roverModel;
     let rueda = [];
-    let rueda1;
-    let rueda2;
-    let rueda3;
-    let rueda4;
-    let rueda5;
-    let rueda6;
     let cuerpo;
     let cabeza;
     let ojo;
     let antena;
 
+    let posRoverX=0;
+    let posRoverY=0;
+    let posRoverZ;
+    let scaleRover;
+    let rotationRoverX=0;
+    let rotationRoverY=0;
+    let rotationRoverZ;
+
+    let movRoverX = 0;
+    let movRoverY = 0;
+
     //Posicionar Rover
-    function posRover(terreno, x, y) {
+    function posRover(terreno, x, y,) {
         roverModel.position.x = x;
         roverModel.position.y = y;
         //this.roverModel.position.z = terreno.posZ(x,y);
@@ -42,8 +47,8 @@
         var geo = new THREE.BoxGeometry(1, 0.7, 0.3);
         var mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
         cuerpo = new THREE.Mesh(geo, mat);
-        cuerpo.castShadow = true;
-        cuerpo.receiveShadow = true;
+        cuerpo.castShadow = mostrarSombras;
+        cuerpo.receiveShadow = mostrarSombras;
         roverModel.add(cuerpo);
 
         for (i=0;i<6;i++)
@@ -61,8 +66,8 @@
             rueda[i].position.x = offsetRuedaX;
             rueda[i].position.y = offsetRuedaY;
             rueda[i].position.z = offsetRuedaZ;
-            rueda[i].castShadow = true;
-            rueda[i].receiveShadow = true;
+            rueda[i].castShadow = mostrarSombras;
+            rueda[i].receiveShadow = mostrarSombras;
             roverModel.add(rueda[i]);
         }
 
@@ -72,8 +77,8 @@
         cabeza.position.x = 0.5;
         cabeza.position.y = 0;
         cabeza.position.z = 0.5;
-        cabeza.castShadow = true;
-        cabeza.receiveShadow = true;
+        cabeza.castShadow = mostrarSombras;
+        cabeza.receiveShadow = mostrarSombras;
 
         geo = new THREE.CylinderGeometry(0.08, 0.08, 0.08, 10);
         mat = new THREE.MeshPhongMaterial({ color: 0x222222 });
@@ -82,8 +87,8 @@
         ojo.position.x = 0.08;
         ojo.position.y = 0.12;
         ojo.position.z = 0;
-        ojo.castShadow = true;
-        ojo.receiveShadow = true;
+        ojo.castShadow = mostrarSombras;
+        ojo.receiveShadow = mostrarSombras;
         cabeza.add(ojo);
 
         geo = new THREE.CylinderGeometry(0.08, 0.08, 0.08, 10);
@@ -92,8 +97,8 @@
         ojo.position.x = 0.08;
         ojo.position.y = -0.12;
         ojo.position.z = 0;
-        ojo.castShadow = true;
-        ojo.receiveShadow = true;
+        ojo.castShadow = mostrarSombras;
+        ojo.receiveShadow = mostrarSombras;
         cabeza.add(ojo);
 
         roverModel.add(cabeza);
@@ -102,20 +107,20 @@
         mat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
         mat.side = THREE.DoubleSide;
         antena = new THREE.Mesh(geo, mat);
-        antena.castShadow = true;
-        antena.receiveShadow = true;
+        antena.castShadow = mostrarSombras;
+        antena.receiveShadow = mostrarSombras;
 
         geo = new THREE.CylinderGeometry(0.12, 0.18, 0.02, 10, 1, true);
         trozoAntena = new THREE.Mesh(geo, mat);
         trozoAntena.position.y = -0.02;
-        trozoAntena.castShadow = true;
-        trozoAntena.receiveShadow = true;
+        trozoAntena.castShadow = mostrarSombras;
+        trozoAntena.receiveShadow = mostrarSombras;
         antena.add(trozoAntena);
         geo = new THREE.CylinderGeometry(0.18, 0.24, 0.04, 10, 1, true);
         trozoAntena = new THREE.Mesh(geo, mat);
         trozoAntena.position.y = -0.05;
-        trozoAntena.castShadow = true;
-        trozoAntena.receiveShadow = true;
+        trozoAntena.castShadow = mostrarSombras;
+        trozoAntena.receiveShadow = mostrarSombras;
         antena.add(trozoAntena);
 
         antena.rotation.z = -Math.PI / 2;

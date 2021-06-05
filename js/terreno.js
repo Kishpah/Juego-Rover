@@ -22,7 +22,7 @@ var baldosa = {
     }
   },
   generarModeloBaldosa: function () {
-    var mat = new THREE.MeshLambertMaterial({ color: 0xaa4433 });
+    var mat = new THREE.MeshLambertMaterial({ color: 0xAA4433 });
     mat.side = THREE.DoubleSide;
 
     for (i = 0; i < 3; i++) {
@@ -37,7 +37,7 @@ var baldosa = {
         geom.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
         geom.computeVertexNormals();
         tmpMesh = new THREE.Mesh(geom, mat);
-        tmpMesh.receiveShadow = true;
+        tmpMesh.receiveShadow = mostrarSombras;
         this.subBaldosas[i][j] = tmpMesh;
 
         vertices = new Float32Array([
@@ -49,10 +49,10 @@ var baldosa = {
         geom.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
         geom.computeVertexNormals();
         tmpMesh = new THREE.Mesh(geom, mat);
-        tmpMesh.receiveShadow = true;
+        tmpMesh.receiveShadow = mostrarSombras;
         this.subBaldosas[i][j].add(tmpMesh);
 
-        this.subBaldosas[i][j].receiveShadow = true;
+        this.subBaldosas[i][j].receiveShadow = mostrarSombras;
 
         this.baldosaModel.add(this.subBaldosas[i][j]);
       }
@@ -61,7 +61,7 @@ var baldosa = {
 };
 
 var terreno = {
-    tamañoTerreno: 5,
+    tamañoTerreno: 10,
     baldosas: {},
     init: function(){
         this.baldosas = Array.from(Array(this.tamañoTerreno), () => new Array(this.tamañoTerreno));
@@ -71,7 +71,33 @@ var terreno = {
             for(posJ=0;posJ<this.tamañoTerreno;posJ++){
                 baldosaTMP = Object.create(baldosa);
                 baldosaTMP.init();
+                
                 baldosaTMP.generarDatosBaldosa();
+
+                if(posI>0){
+                    baldosaTMP.heightSubMap[0][0] = this.baldosas[posI-1][posJ].heightSubMap[3][0];
+                    baldosaTMP.heightSubMap[0][1] = this.baldosas[posI-1][posJ].heightSubMap[3][1];
+                    baldosaTMP.heightSubMap[0][2] = this.baldosas[posI-1][posJ].heightSubMap[3][2];
+                    baldosaTMP.heightSubMap[0][3] = this.baldosas[posI-1][posJ].heightSubMap[3][3];
+                }
+                else{
+                    baldosaTMP.heightSubMap[0][0] = 0;
+                    baldosaTMP.heightSubMap[0][1] = 0;
+                    baldosaTMP.heightSubMap[0][2] = 0;
+                    baldosaTMP.heightSubMap[0][3] = 0;
+                }
+                if(posJ>0){
+                    baldosaTMP.heightSubMap[0][0] = this.baldosas[posI][posJ-1].heightSubMap[0][3];
+                    baldosaTMP.heightSubMap[1][0] = this.baldosas[posI][posJ-1].heightSubMap[1][3];
+                    baldosaTMP.heightSubMap[2][0] = this.baldosas[posI][posJ-1].heightSubMap[2][3];
+                    baldosaTMP.heightSubMap[3][0] = this.baldosas[posI][posJ-1].heightSubMap[3][3];
+                }
+                else{
+                    baldosaTMP.heightSubMap[0][0] = 0;
+                    baldosaTMP.heightSubMap[1][0] = 0;
+                    baldosaTMP.heightSubMap[2][0] = 0;
+                    baldosaTMP.heightSubMap[3][0] = 0;
+                }
                 baldosaTMP.generarModeloBaldosa();
                 baldosaTMP.coordX=posI*3;
                 baldosaTMP.coordY=posJ*3;
