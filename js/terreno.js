@@ -61,7 +61,7 @@ var baldosa = {
 };
 
 var terreno = {
-    tamañoTerreno: 10,
+    tamañoTerreno: 30,
     baldosas: {},
     init: function(){
         this.baldosas = Array.from(Array(this.tamañoTerreno), () => new Array(this.tamañoTerreno));
