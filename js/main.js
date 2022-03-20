@@ -140,8 +140,8 @@ const animate = function () {
         */
 
         //Modificamos la dirección del rover según las teclas pulsadas
-        if(velRover<0.1){
-            velRover+=0.01;
+        if(velRover<0.08){
+            velRover+=0.001;
         }
         if(teclaArriba){
             dirRover.y+=difGiro;
@@ -155,32 +155,36 @@ const animate = function () {
         if(teclaDerecha){
             dirRover.x+=difGiro;
         }
-        //Ajustamos la dirección según las pulsaciones de las teclas.
-        dirRover=dirRover.normalize();
-
-        //Movemos el Rover según la dirección y la velocidad
-        posRoverX+=dirRover.x*velRover;
-        posRoverY+=dirRover.y*velRover;
-
-        //Ajustamos el ángulo del rover según la dirección
-        var rotacion = 0;
-        rotacion=dirRover.angleTo(new THREE.Vector3(1,0,0));
-        if(dirRover.y<0){rotacion = 2*Math.PI - rotacion};
-        roverModel.rotation.z=rotacion;
-        
-        //Movemos el rover, y con él la cámara
-        camera.position.x = posRoverX;
-        camera.position.y = posRoverY-8;
-        roverModel.position.x = posRoverX;
-        roverModel.position.y = posRoverY;
-        colocarRover(); //Ajusta la altura del rover y de las ruedas
-        roverModel.position.z = posRoverZ;
     }
     else{
         if(velRover>0){
-            velRover-=0.01;
+            velRover-=0.005;
+        }
+        if(velRover<0) {
+            velRover = 0;
         }
     }
+
+    //Ajustamos la dirección según las pulsaciones de las teclas.
+    dirRover=dirRover.normalize();
+
+    //Movemos el Rover según la dirección y la velocidad
+    posRoverX+=dirRover.x*velRover;
+    posRoverY+=dirRover.y*velRover;
+
+    //Ajustamos el ángulo del rover según la dirección
+    var rotacion = 0;
+    rotacion=dirRover.angleTo(new THREE.Vector3(1,0,0));
+    if(dirRover.y<0){rotacion = 2*Math.PI - rotacion};
+    roverModel.rotation.z=rotacion;
+    
+    //Movemos el rover, y con él la cámara
+    camera.position.x = posRoverX;
+    camera.position.y = posRoverY-8;
+    roverModel.position.x = posRoverX;
+    roverModel.position.y = posRoverY;
+    colocarRover(); //Ajusta la altura del rover y de las ruedas
+    roverModel.position.z = posRoverZ;
 
     renderer.render(scene, camera);
 };
